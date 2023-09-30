@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({data}) => {
                     alt="Image"
                     fill
                     className="aspect-square object-cover rounded-md"
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/images?image_path=${data?.image_path}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${data?.image_path}`}
                 />
                 <div className="opacity-0 group-hover:opacity-100 top-[15%] transition absolute w-full" >
                     <div className="flex flex-col gap-6 justify-center" >

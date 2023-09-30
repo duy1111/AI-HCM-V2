@@ -130,7 +130,7 @@ const Navbar: React.FC<any> = () => {
                 </div>
                 <Slider
                   className="w-[150px]"
-                  defaultValue={[searchData.alpha]}  
+                  defaultValue={[0.5]}  
                   max={1}
                   step={0.01}
                   onValueChange={handleSliderChange}
