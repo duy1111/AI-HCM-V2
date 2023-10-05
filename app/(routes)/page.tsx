@@ -8,7 +8,6 @@ import { useEffect } from "react";
 
 const HomePage = () => {
     const list = useImage((state) => state.items)
-
     return ( 
         <Container>
             <div className="space-y-10 pb-10" >

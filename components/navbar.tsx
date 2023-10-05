@@ -15,7 +15,7 @@ const Navbar: React.FC<any> = () => {
     text_search_1: "",
     text_search_2: "",
     alpha: 0.5,
-    k: 0
+    k: 5
   });
 
   const [objectDetection, setObjectDetection] = useState<{ object: string }>({
@@ -46,6 +46,7 @@ const Navbar: React.FC<any> = () => {
     const data = useImages.items;
 
     try {
+      console.log(data)
       const response = await axios.post(URL, data);
       if (response.status === 200) {
         toast.success("Success");

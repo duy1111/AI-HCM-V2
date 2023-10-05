@@ -51,7 +51,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     const URL = `${process.env.NEXT_PUBLIC_API_URL}/submit-title`;
 
     try {
-      const response = await axios.post(URL,data.title);
+      console.log(data)
+      const response = await axios.post(URL,data);
       if(response.status === 200){
         toast.success("submit success!")
       }else{
@@ -68,14 +69,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
         <img
           alt="Image"
           className="aspect-square object-cover rounded-md"
-          src={`${process.env.NEXT_PUBLIC_API_URL}/images?image_path=${data?.image_path}`}
+          src={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.image_path}`}
         />
         <div className="opacity-0 group-hover:opacity-100 top-[5%] transition absolute w-full">
           <div className="flex flex-col gap-1 justify-center">
             <Button title="view" size="sm">
               <Link
                 className="w-full"
-                href={`${process.env.NEXT_PUBLIC_API_URL}/images?image_path=${data?.image_path}`}
+                href={`${process.env.NEXT_PUBLIC_API_URL}/images/${data?.image_path}`}
                 target="_blank"
               >
                 view
