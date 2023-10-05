@@ -37,6 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     try {
       const response = await getImageWithImageSearch(data.image_path);
       if (response) {
+        toast.success("success!")
         useImages.removeAll();
         useImages.addItem(response);
       }
@@ -64,13 +65,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
   return (
     <div className="bg-white group cursor-pointer rounded-xl border p-1 space-y4">
       {/* Images and Actions */}
-      <div className="aspect-square rounded-xl bg-gray-100 relative">
+      <div className="rounded-xl bg-gray-100 relative">
         <img
           alt="Image"
-          className="aspect-square object-cover rounded-md"
+          className=" aspect-video object-cover rounded-md"
           src={`${process.env.NEXT_PUBLIC_API_URL}/images?image_path=${data?.image_path}`}
         />
-        <div className="opacity-0 group-hover:opacity-100 top-[5%] transition absolute w-full">
+        <div className="opacity-0 group-hover:opacity-100 top-1 transition absolute w-full">
           <div className="flex flex-col gap-1 justify-center">
             <Button title="view" size="sm">
               <Link
