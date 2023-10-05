@@ -75,7 +75,7 @@ const Navbar: React.FC<any> = () => {
           query: {
             params: ocrSearch,
           },
-          data: data,
+          data: response.data,
           url: "ocr-search",
           method: "POST",
         });
@@ -103,7 +103,7 @@ const Navbar: React.FC<any> = () => {
           query: {
             params: objectDetection,
           },
-          data: data,
+          data: response.data,
           url: "object-detection",
           method: "POST",
         });
