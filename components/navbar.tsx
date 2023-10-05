@@ -9,13 +9,14 @@ import useImage from "@/hooks/use-images";
 import { Slider } from "@/components/ui/slider";
 import toast from "react-hot-toast";
 import { Result } from "postcss";
+import useBack from "@/hooks/use-back-store";
 
 const Navbar: React.FC<any> = () => {
   const [searchData, setSearchData] = useState<Query>({
     text_search_1: "",
     text_search_2: "",
     alpha: 0.5,
-    k: 0
+    k: 0,
   });
 
   const [objectDetection, setObjectDetection] = useState<{ object: string }>({
@@ -25,15 +26,19 @@ const Navbar: React.FC<any> = () => {
   const [ocrSearch, setOcrSearch] = useState<{ query: string }>({
     query: "",
   });
- 
 
-
-
+  const useback = useBack();
   const useImages = useImage();
   const handleTextSearch = async () => {
     try {
       const response = await getImageWithTextSearch(searchData);
       if (response) {
+        useback.addItem({
+          query: searchData,
+          data: response,
+          url: "text-search",
+          method: "GET",
+        });
         useImages.removeAll();
         useImages.addItem(response);
       }
@@ -65,6 +70,14 @@ const Navbar: React.FC<any> = () => {
         params: ocrSearch,
       });
       if (response.status === 200) {
+        useback.addItem({
+          query: {
+            params: ocrSearch,
+          },
+          data: data,
+          url: "ocr-search",
+          method: "POST",
+        });
         useImages.removeAll();
         useImages.addItem(response.data);
       }
@@ -85,6 +98,14 @@ const Navbar: React.FC<any> = () => {
       console.log(response);
 
       if (response.status === 200) {
+        useback.addItem({
+          query: {
+            params: objectDetection,
+          },
+          data: data,
+          url: "object-detection",
+          method: "POST",
+        });
         useImages.removeAll();
         useImages.addItem(response.data);
       }
@@ -93,9 +114,19 @@ const Navbar: React.FC<any> = () => {
     }
   };
 
+  const handleBack = async () => {
+    try {
+      let data = useback.removeOne();
+      console.log(data);
+      useImages.removeAll();
+      useImages.addItem(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  const handleSliderChange = (value:number[]) => {
-    setSearchData({...searchData, alpha : value[0]})
+  const handleSliderChange = (value: number[]) => {
+    setSearchData({ ...searchData, alpha: value[0] });
   };
 
   return (
@@ -130,16 +161,20 @@ const Navbar: React.FC<any> = () => {
                 </div>
                 <Slider
                   className="w-[150px]"
-                  defaultValue={[0.5]}  
+                  defaultValue={[0.5]}
                   max={1}
                   step={0.01}
                   onValueChange={handleSliderChange}
                 />
               </div>
-              <Input type="number"   value={searchData.k}
-              onChange={(e) =>
-                setSearchData({ ...searchData, k: +e.target.value })
-              }  className="w-20" />
+              <Input
+                type="number"
+                value={searchData.k}
+                onChange={(e) =>
+                  setSearchData({ ...searchData, k: +e.target.value })
+                }
+                className="w-20"
+              />
             </div>
             <Button onClick={handleTextSearch} className="h-full w-1/2">
               Search
@@ -169,8 +204,13 @@ const Navbar: React.FC<any> = () => {
               </Button>
             </div>
           </div>
-          <div className="px-4 gap-2 w-12">
-            <Button onClick={handleSubmit}>Submit</Button>
+          <div className="px-4 h-full gap-2  flex flex-col justify-between">
+            <div className="gap-2 w-12">
+              <Button size={'sm'} onClick={handleSubmit}>Submit</Button>
+            </div>
+            <div className="gap-2 w-12">
+              <Button size={'sm'} onClick={handleBack}>Back</Button>
+            </div>
           </div>
         </div>
       </Container>

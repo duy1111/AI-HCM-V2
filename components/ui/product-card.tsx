@@ -1,9 +1,8 @@
 "use client";
 
 import { Image as ImageType } from "@/type";
-import Image from "next/image";
 import Link from "next/link";
-
+import qs from 'query-string'
 import { MouseEventHandler } from "react";
 import { Button } from "./button";
 import useImage from "@/hooks/use-images";
@@ -11,18 +10,30 @@ import getImageWithSegmentSearch from "@/actions/get-segment";
 import getImageWithImageSearch from "@/actions/get-image-search";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useBack from "@/hooks/use-back-store";
 
 interface ProductCardProps {
   data: ImageType;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
+  const useback = useBack();
+
   const useImages = useImage();
   const handleSegment: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.stopPropagation();
     try {
       const response = await getImageWithSegmentSearch(data.image_path);
       if (response) {
+        toast.success("success!")
+        useback.addItem({
+          query: {
+            image_path:data.image_path,
+          },
+          data:null,
+          url:'segment-search',
+          method:'GET'
+        })
         useImages.removeAll();
         useImages.addItem(response);
       }
@@ -37,7 +48,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     try {
       const response = await getImageWithImageSearch(data.image_path);
       if (response) {
+    
         toast.success("success!")
+        useback.addItem({
+          query: {
+            image_path:data.image_path,
+          },
+          data:null,
+          url:'image-search',
+          method:'GET'
+        })
+        useImages.removeAll();
+        useImages.addItem(response);
         useImages.removeAll();
         useImages.addItem(response);
       }

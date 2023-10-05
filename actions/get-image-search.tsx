@@ -1,7 +1,9 @@
+import useBack from "@/hooks/use-back-store";
 import {  Image } from "@/type";
 import qs from 'query-string'
 
-const URL = `${process.env.NEXT_PUBLIC_API_URL}/segment-search`
+
+const URL = `${process.env.NEXT_PUBLIC_API_URL}/image-search`
 
 export interface Query {
     image_path: string
@@ -10,6 +12,8 @@ export interface Query {
 
 
 const getImageWithImageSearch = async (image_path:string): Promise<Image[]> => {
+   
+
     const url = qs.stringifyUrl({
         url: URL,
         query: {
@@ -17,6 +21,7 @@ const getImageWithImageSearch = async (image_path:string): Promise<Image[]> => {
             // text_search_2:query.text_search_2
         }
     })
+
     const res = await fetch(url);
     return res.json()
 }
